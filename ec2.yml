@@ -1,0 +1,41 @@
+- hosts: "127.0.0.1"
+  vars_files:
+      - credential.yml
+  tasks:
+  - name: launch Master Node AWS cloud
+    ec2:
+          key_name: "kube"
+          instance_type: "t2.micro"
+          image:  "ami-0e2e44c03b85f58b3"
+          wait: yes
+          count: 1
+          vpc_subnet_id: "subnet-5d837b15"
+          group_id: sg-0cc57a6a53a1e5dbe
+          assign_public_ip: yes
+          region: "ap-southeast-1"
+          state: present
+          group: "default"
+          aws_access_key: "{{ accesskey   }}"
+          aws_secret_key: "{{  secretkey   }}"
+          instance_tags: {"Name": "Master", "Cluster": "k8s Cluster"}
+
+- hosts: "127.0.0.1"
+  vars_files:
+      - credential.yml
+  tasks:
+  - name: launch Worker Node on AWS cloud
+    ec2:
+          key_name: "kube"
+          instance_type: "t2.micro"
+          image:  "ami-0e2e44c03b85f58b3"
+          wait: yes
+          count: 2
+          vpc_subnet_id: "subnet-5d837b15"
+          group_id: sg-0cc57a6a53a1e5dbe
+          assign_public_ip: yes
+          region: "ap-southeast-1"
+          state: present
+          group: "default"
+          aws_access_key: "{{ accesskey   }}"
+          aws_secret_key: "{{  secretkey   }}"
+          instance_tags: {"Name": "Worker", "Cluster": "k8s Cluster"}
